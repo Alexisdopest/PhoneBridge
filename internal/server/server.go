@@ -15,6 +15,7 @@ func NewServer(port string, token string) *http.Server {
 	// Register routes with auth middleware
 	mux.HandleFunc("/api/clipboard", auth.Middleware(token, ClipboardHandler))
 	mux.HandleFunc("/api/upload", auth.Middleware(token, UploadHandler))
+	mux.HandleFunc("/ws/events", auth.Middleware(token, WSEventsHandler)) // Future dual-way communication
 
 	addr := fmt.Sprintf(":%s", port)
 	log.Printf("Server listening on http://0.0.0.0%s", addr)

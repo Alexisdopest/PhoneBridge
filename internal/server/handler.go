@@ -9,6 +9,7 @@ import (
 
 	"github.com/Alexisdopest/PhoneBridge/internal/clipboard"
 	"github.com/Alexisdopest/PhoneBridge/internal/storage"
+	"github.com/gorilla/websocket"
 )
 
 // ClipboardHandler handles POST requests to update the clipboard
@@ -18,7 +19,6 @@ func ClipboardHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Read the text from the request body
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "Bad request", http.StatusBadRequest)
@@ -32,7 +32,6 @@ func ClipboardHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Write to Windows clipboard
 	err = clipboard.WriteText(text)
 	if err != nil {
 		log.Printf("Failed to write clipboard: %v", err)
@@ -52,7 +51,6 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Limit to 100 MB max for now to avoid memory explosion
 	err := r.ParseMultipartForm(100 << 20)
 	if err != nil {
 		http.Error(w, "Failed to parse form (max 100MB)", http.StatusBadRequest)
@@ -66,7 +64,6 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	// Determine save directory (Downloads/PhoneBridge for now)
 	homeDir, _ := os.UserHomeDir()
 	destDir := filepath.Join(homeDir, "Downloads", "PhoneBridge")
 
@@ -80,4 +77,31 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Successfully saved file: %s", savedPath)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("File uploaded successfully: " + savedPath))
+}
+
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true // Allow all for LAN connections initially
+	},
+}
+
+// WSEventsHandler upgrades the HTTP connection to a WebSocket for future event pushing
+func WSEventsHandler(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Printf("Failed to upgrade to WebSocket: %v", err)
+		return
+	}
+	defer conn.Close()
+
+	log.Println("New WebSocket client connected (Pre-reserved for Milestone 3+)")
+	
+	// Keep connection alive until client disconnects
+	for {
+		_, _, err := conn.ReadMessage()
+		if err != nil {
+			break
+		}
+	}
+	log.Println("WebSocket client disconnected")
 }
