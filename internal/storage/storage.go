@@ -14,6 +14,12 @@ func SaveFile(destDir string, filename string, r io.Reader) (string, error) {
 		return "", fmt.Errorf("failed to create directory: %w", err)
 	}
 
+	// Fix path traversal vulnerability by extracting only the base filename
+	filename = filepath.Base(filename)
+	if filename == "." || filename == "/" || filename == "\\" {
+		filename = "upload"
+	}
+
 	ext := filepath.Ext(filename)
 	base := filename[:len(filename)-len(ext)]
 	if base == "" {

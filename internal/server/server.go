@@ -8,8 +8,8 @@ import (
 	"github.com/Alexisdopest/PhoneBridge/internal/auth"
 )
 
-// Start initializes routing and starts the HTTP server
-func Start(port string, token string) error {
+// NewServer initializes routing and returns an HTTP server instance
+func NewServer(port string, token string) *http.Server {
 	mux := http.NewServeMux()
 
 	// Register routes with auth middleware
@@ -19,6 +19,8 @@ func Start(port string, token string) error {
 	addr := fmt.Sprintf(":%s", port)
 	log.Printf("Server listening on http://0.0.0.0%s", addr)
 	
-	// Start server
-	return http.ListenAndServe(addr, mux)
+	return &http.Server{
+		Addr:    addr,
+		Handler: mux,
+	}
 }
