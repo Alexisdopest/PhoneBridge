@@ -14,6 +14,7 @@ func Start(port string, token string) error {
 
 	// Register routes with auth middleware
 	mux.HandleFunc("/api/clipboard", auth.Middleware(token, ClipboardHandler))
+	mux.HandleFunc("/api/upload", auth.Middleware(token, UploadHandler))
 
 	addr := fmt.Sprintf(":%s", port)
 	log.Printf("Server listening on http://0.0.0.0%s", addr)
