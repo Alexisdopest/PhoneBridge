@@ -2,12 +2,14 @@
 
 PhoneBridge 是一款轻量级的 Windows 与 iOS 跨设备局域网协作工具。核心理念是通过 iOS 原生“快捷指令 (Shortcuts)”实现将手机端的文本一键发送并自动写入 Windows 系统的剪贴板，以及文件/图片的静默传输保存。
 
-## 🌟 核心特性 (v1.0 Milestone 2)
+## 🌟 核心特性 (v1.0 Release)
 - **极速纯内网传输**：局域网直接 P2P 传输，不经外网，保护数据隐私。
+- **系统托盘驻留**：无控制台黑框打扰，安静地运行在 Windows 任务栏系统托盘。
+- **开机自启支持**：一键设置随系统启动，真正做到“装完即忘”。
 - **设备配对鉴权**：利用 Bearer Token 进行强鉴权，防止局域网内其他设备任意调用。
-- **零配置寻址 (mDNS)**：自动在局域网广播 `_phonebridge._tcp` 服务，摆脱固定 IP 限制（搭配支持解析 mDNS 的客户端使用）。
-- **无缝剪贴板同步**：手机端执行指令后，文字立即出现在电脑剪贴板中。
-- **文件与图片直传**：手机端选取图片或文件后无感发送，自动保存在 Windows 的 `Downloads\PhoneBridge` 目录下。
+- **零配置寻址 (mDNS)**：自动在局域网广播 `_phonebridge._tcp` 服务。
+- **无缝剪贴板同步**：手机端执行指令后，文字立刻到达电脑剪贴板。
+- **文件与图片直传**：自动分类保存在 Windows `Downloads\PhoneBridge` 目录下。
 
 ## 🚀 快速开始
 
@@ -22,10 +24,13 @@ cd PhoneBridge
 # 2. 安装依赖
 go mod tidy
 
-# 3. 运行服务
-go run ./cmd/phonebridge/main.go
+# 3. 编译发布版 (隐藏控制台，后台托盘运行)
+go build -ldflags="-H windowsgui" -o phonebridge.exe ./cmd/phonebridge
+
+# 4. 启动程序
+./phonebridge.exe
 ```
-启动成功后，控制台会输出您的配对凭证（默认为 `123456`）。
+启动成功后，您将在右下角任务栏看到 PhoneBridge 图标。通过右键菜单可以开启“开机启动”或“打开接收文件夹”。
 
 ### 2. iOS 快捷指令配置
 
@@ -44,19 +49,16 @@ go run ./cmd/phonebridge/main.go
    - **方法 (Method)**: `POST`
    - **头部 (Headers)**: `Authorization` -> `Bearer 123456`
    - **请求体 (Request Body)**: 选择 `表单 (Form)`
-     - 新增字段：类型选 `文件`，键填 `file`，值选第1步获取的照片或文件。
+     - 新增字段：类型选 `文件`，键填 `file`，值选第1步的照片或文件。
 
-运行快捷指令即可将文件快速投递到 Windows 的 `下载\PhoneBridge` 文件夹！
+配置完成后运行快捷指令，即可体验无缝投递！
 
-## 📄 目录结构说明
-```text
-internal/
-├── discovery   # mDNS 局域网服务广播
-├── server      # HTTP 服务端引擎及 API Router
-├── auth        # Bearer Token 请求拦截校验中间件
-├── clipboard   # 剪贴板底层 API 及互斥锁封装
-├── storage     # 文件存储与防碰撞落地机制
-└── utils       # 工具函数 (Token生成等)
-cmd/
-└── phonebridge # 守护程序入口主文件
-```
+## 📄 架构说明
+项目遵循高内聚设计，包含以下核心模块：
+- `internal/app`: 全局生命周期与托盘守护。
+- `internal/server`: HTTP 服务及 WebSocket 预留。
+- `internal/auth`: Bearer Token 请求拦截校验。
+- `internal/clipboard`: 系统剪贴板底层互斥封装。
+- `internal/storage`: 防碰撞文件落地存储。
+- `internal/discovery`: 局域网 mDNS 广播。
+- `internal/tray & autostart`: Windows 原生托盘菜单与系统注册表管理。
