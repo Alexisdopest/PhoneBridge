@@ -23,13 +23,18 @@ PhoneBridge 是一款轻量级的 Windows 与 iOS 跨设备局域网协作工具
 
 *(如果您希望自行编译，请克隆仓库并使用 `go build -ldflags="-H windowsgui" -o phonebridge.exe ./cmd/phonebridge` 构建。)*
 
-### 2. 扫码极速配置 (iOS 快捷指令)
+### 2. 扫码极速配置 (iOS 官方快捷指令)
 
-为了安全，PhoneBridge 会在首次启动时生成 32 字节的高强度随机配对 Token。
+为了安全，PhoneBridge 会在首次启动时生成 32 字节的高强度随机配对 Token。我们为您准备了官方的快捷指令生态，**只需扫码一次，终身免配置**：
 
-1. 在电脑右下角托盘找到 PhoneBridge 图标，右键点击 **“显示配对二维码”**。
-2. 使用 iPhone 扫描屏幕上的二维码（或使用我们即将上架的 [PhoneBridge 官方快捷指令](#) 自动扫码解析）。
-3. 解析后，您将获得自动填入 Token 和 IP 的快捷指令。
+1. **核心配置 (必装)**: [PhoneBridge 配对](https://www.icloud.com/shortcuts/ea70424836cf4ed5b65287318901c693)
+   *用法：在电脑右下角托盘点击“显示配对二维码”，手机运行此指令扫码，配置将安全保存在您的手机本地。*
+
+2. **文字直传 (必装)**: [PhoneBridge 发送文本](https://www.icloud.com/shortcuts/7fc82e0fc0614fcab803dab4536a2c13)
+   *用法：复制任何文字，运行此指令，文字将瞬间到达 Windows 剪贴板。*
+
+3. **文件直传 (进阶)**: [PhoneBridge 传文件](https://www.icloud.com/shortcuts/68c2335edf054fddaa28dcd0dcfadf43)
+   *用法：在相册或文件中选中资源，点击系统自带的“分享”按钮，在菜单中选择“PhoneBridge 传文件”，即可瞬间发送到电脑 `Downloads/PhoneBridge` 目录。*
 
 ---
 
