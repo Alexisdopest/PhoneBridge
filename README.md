@@ -30,10 +30,10 @@ PhoneBridge 是一款轻量级的 Windows 与 iOS 跨设备局域网协作工具
 
 请在 iPhone 上依次点击安装以下官方快捷指令：
 
-1. 🔗 [【PhoneBridge 配对】](https://www.icloud.com/shortcuts/ea70424836cf4ed5b65287318901c693) 
+1. 🔗 [【手机配对电脑（需同一个局域网）】](https://www.icloud.com/shortcuts/6f61d40437d74d8f9276da3db80449da) 
    *(必装：只需在首次使用时，用它扫描电脑端托盘弹出的二维码，即可永久保存网络配置)*
-2. 🔗 [【PhoneBridge 智能拷贝万物】](https://www.icloud.com/shortcuts/68f49eb7ba134ed8a5e21702edcf08dc) 
-   *(核心功能：支持拷贝万物与批量直传。拷贝任何文字/图片，或在相册/文件中选中多个资源点击“分享”运行它，即可智能分流并瞬间同步至电脑！)*
+2. 🔗 [【PhoneBridge 跨端闪传】](https://www.icloud.com/shortcuts/a65353a7957349f292a2ae457946f175) 
+   *(核心功能：支持跨端闪传与批量直传。拷贝任何文字/图片，或在相册/文件中选中多个资源点击“分享”运行它，即可智能分流并瞬间同步至电脑！)*
 
 ---
 
