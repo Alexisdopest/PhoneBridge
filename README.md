@@ -14,23 +14,13 @@ PhoneBridge 是一款轻量级的 Windows 与 iOS 跨设备局域网协作工具
 ## 🚀 快速开始
 
 ### 1. Windows 服务端运行
-请确保电脑已安装 [Go 1.22+](https://go.dev/)。
+最简单的方式是直接下载编译好的程序：
 
-```bash
-# 1. 克隆仓库
-git clone https://github.com/Alexisdopest/PhoneBridge.git
-cd PhoneBridge
+1. 在 GitHub 的 [Actions 或 Releases](#) 页面下载最新构建的 `phonebridge.exe`。
+2. 双击运行程序。
+3. 您将在右下角任务栏看到 PhoneBridge 托盘图标。右键菜单可开启“开机启动”。
 
-# 2. 安装依赖
-go mod tidy
-
-# 3. 编译发布版 (隐藏控制台，后台托盘运行)
-go build -ldflags="-H windowsgui" -o phonebridge.exe ./cmd/phonebridge
-
-# 4. 启动程序
-./phonebridge.exe
-```
-启动成功后，您将在右下角任务栏看到 PhoneBridge 图标。通过右键菜单可以开启“开机启动”或“打开接收文件夹”。
+*(如果您希望自行编译，请克隆仓库并使用 `go build -ldflags="-H windowsgui" -o phonebridge.exe ./cmd/phonebridge` 构建。)*
 
 ### 2. iOS 快捷指令配置
 
