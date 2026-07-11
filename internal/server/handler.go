@@ -54,22 +54,48 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	// [Security P1 Fix]: Limit upload size to 1GB to prevent LAN abuse / disk exhaustion
 	r.Body = http.MaxBytesReader(w, r.Body, 1<<30)
 
-	if err := r.ParseMultipartForm(32 << 20); err != nil {
-		http.Error(w, "Failed to parse form or file too large", http.StatusBadRequest)
-		return
-	}
+	contentType := r.Header.Get("Content-Type")
+	var file io.Reader
+	var filename string
 
-	file, header, err := r.FormFile("file")
-	if err != nil {
-		http.Error(w, "Missing 'file' field in form", http.StatusBadRequest)
-		return
+	// Handle standard Multipart Form (Share Sheet usage)
+	if len(contentType) >= 19 && contentType[:19] == "multipart/form-data" {
+		if err := r.ParseMultipartForm(32 << 20); err != nil {
+			log.Printf("ParseMultipartForm error: %v", err)
+			http.Error(w, "Failed to parse form or file too large", http.StatusBadRequest)
+			return
+		}
+
+		f, header, err := r.FormFile("file")
+		if err != nil {
+			http.Error(w, "Missing 'file' field in form", http.StatusBadRequest)
+			return
+		}
+		defer f.Close()
+		file = f
+		filename = header.Filename
+	} else {
+		// Handle Raw Binary Body (Clipboard Image usage, bypassing iOS Form bugs)
+		file = r.Body
+		ext := ".bin"
+		if contentType == "image/jpeg" {
+			ext = ".jpg"
+		} else if contentType == "image/png" {
+			ext = ".png"
+		} else if contentType == "image/heic" {
+			ext = ".heic"
+		} else if contentType == "image/gif" {
+			ext = ".gif"
+		} else if contentType == "text/plain" {
+			ext = ".txt"
+		}
+		filename = "upload_clipboard" + ext
 	}
-	defer file.Close()
 
 	homeDir, _ := os.UserHomeDir()
 	destDir := filepath.Join(homeDir, "Downloads", "PhoneBridge")
 
-	savedPath, err := storage.SaveFile(destDir, header.Filename, file)
+	savedPath, err := storage.SaveFile(destDir, filename, file)
 	if err != nil {
 		log.Printf("Failed to save file: %v", err)
 		http.Error(w, "Failed to save file", http.StatusInternalServerError)

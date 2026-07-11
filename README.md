@@ -2,14 +2,15 @@
 
 PhoneBridge 是一款轻量级的 Windows 与 iOS 跨设备局域网协作工具。核心理念是通过 iOS 原生“快捷指令 (Shortcuts)”实现将手机端的文本一键发送并自动写入 Windows 系统的剪贴板，以及文件/图片的静默传输保存。
 
-## 🌟 核心特性 (v1.0 Release)
+## 🌟 核心特性 (v1.1.0 Release)
 - **极速纯内网传输**：局域网直接 P2P 传输，不经外网，保护数据隐私。
 - **系统托盘驻留**：无控制台黑框打扰，安静地运行在 Windows 任务栏系统托盘。
 - **开机自启支持**：一键设置随系统启动，真正做到“装完即忘”。
 - **设备配对鉴权**：利用 Bearer Token 进行强鉴权，防止局域网内其他设备任意调用。
 - **零配置寻址 (mDNS)**：自动在局域网广播 `_phonebridge._tcp` 服务。
-- **无缝剪贴板同步**：手机端执行指令后，文字立刻到达电脑剪贴板。
-- **文件与图片直传**：自动分类保存在 Windows `Downloads\PhoneBridge` 目录下。
+- **无缝剪贴板同步**：手机端执行指令后，纯文本与网页链接自动到达电脑剪贴板。
+- **文件与图片直传**：智能识别剪贴板内容，拷贝照片或文件直接跨端保存至 Windows `Downloads\PhoneBridge` 目录下。
+- **全能“拷贝万物”指令**：独创的智能分流逻辑，无论是文本、HTML 链接、HEIC 图像还是 PDF 文件，只需执行同一个快捷指令即可完美分发！
 
 ## 🚀 快速开始
 
@@ -27,14 +28,14 @@ PhoneBridge 是一款轻量级的 Windows 与 iOS 跨设备局域网协作工具
 
 为了安全，PhoneBridge 会在首次启动时生成 32 字节的高强度随机配对 Token。我们为您准备了官方的快捷指令生态，**只需扫码一次，终身免配置**：
 
-1. **核心配置 (必装)**: [PhoneBridge 配对](https://www.icloud.com/shortcuts/ea70424836cf4ed5b65287318901c693)
-   *用法：在电脑右下角托盘点击“显示配对二维码”，手机运行此指令扫码，配置将安全保存在您的手机本地。*
+请在 iPhone 上依次点击安装以下官方快捷指令：
 
-2. **文字直传 (必装)**: [PhoneBridge 发送文本](https://www.icloud.com/shortcuts/7fc82e0fc0614fcab803dab4536a2c13)
-   *用法：复制任何文字，运行此指令，文字将瞬间到达 Windows 剪贴板。*
-
-3. **文件直传 (进阶)**: [PhoneBridge 传文件](https://www.icloud.com/shortcuts/68c2335edf054fddaa28dcd0dcfadf43)
-   *用法：在相册或文件中选中资源，点击系统自带的“分享”按钮，在菜单中选择“PhoneBridge 传文件”，即可瞬间发送到电脑 `Downloads/PhoneBridge` 目录。*
+1. 🔗 [【PhoneBridge 配对】](https://www.icloud.com/shortcuts/ea70424836cf4ed5b65287318901c693) 
+   *(必装：只需在首次使用时，用它扫描电脑端托盘弹出的二维码，即可永久保存网络配置)*
+2. 🔗 [【PhoneBridge 智能剪贴板】](https://www.icloud.com/shortcuts/e5ed3f772a15433ab9794c60ee3e5ffd) 
+   *(核心功能：支持拷贝万物。拷贝任何文字、链接、图片或文件后运行它，即可智能分流并瞬间同步至电脑！)*
+3. 🔗 [【PhoneBridge 传文件】](https://www.icloud.com/shortcuts/68c2335edf054fddaa28dcd0dcfadf43)
+   *(用法：在相册或文件中选中资源，点击系统自带的“分享”按钮，在菜单中选择“PhoneBridge 传文件”，即可瞬间发送到电脑 `Downloads/PhoneBridge` 目录。)*
 
 ---
 
