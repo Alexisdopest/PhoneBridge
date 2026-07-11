@@ -32,10 +32,8 @@ PhoneBridge 是一款轻量级的 Windows 与 iOS 跨设备局域网协作工具
 
 1. 🔗 [【PhoneBridge 配对】](https://www.icloud.com/shortcuts/ea70424836cf4ed5b65287318901c693) 
    *(必装：只需在首次使用时，用它扫描电脑端托盘弹出的二维码，即可永久保存网络配置)*
-2. 🔗 [【PhoneBridge 智能剪贴板】](https://www.icloud.com/shortcuts/e5ed3f772a15433ab9794c60ee3e5ffd) 
-   *(核心功能：支持拷贝万物。拷贝任何文字、链接、图片或文件后运行它，即可智能分流并瞬间同步至电脑！)*
-3. 🔗 [【PhoneBridge 传文件】](https://www.icloud.com/shortcuts/68c2335edf054fddaa28dcd0dcfadf43)
-   *(用法：在相册或文件中选中资源，点击系统自带的“分享”按钮，在菜单中选择“PhoneBridge 传文件”，即可瞬间发送到电脑 `Downloads/PhoneBridge` 目录。)*
+2. 🔗 [【PhoneBridge 智能拷贝万物】](https://www.icloud.com/shortcuts/68f49eb7ba134ed8a5e21702edcf08dc) 
+   *(核心功能：支持拷贝万物与批量直传。拷贝任何文字/图片，或在相册/文件中选中多个资源点击“分享”运行它，即可智能分流并瞬间同步至电脑！)*
 
 ---
 
