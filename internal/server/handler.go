@@ -44,16 +44,18 @@ func ClipboardHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Clipboard updated"))
 }
 
-// UploadHandler handles POST requests for uploading files/images
+// UploadHandler handles file and image uploads
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	err := r.ParseMultipartForm(100 << 20)
-	if err != nil {
-		http.Error(w, "Failed to parse form (max 100MB)", http.StatusBadRequest)
+	// [Security P1 Fix]: Limit upload size to 1GB to prevent LAN abuse / disk exhaustion
+	r.Body = http.MaxBytesReader(w, r.Body, 1<<30)
+
+	if err := r.ParseMultipartForm(32 << 20); err != nil {
+		http.Error(w, "Failed to parse form or file too large", http.StatusBadRequest)
 		return
 	}
 
