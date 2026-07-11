@@ -85,23 +85,57 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-// WSEventsHandler upgrades the HTTP connection to a WebSocket for future event pushing
-func WSEventsHandler(w http.ResponseWriter, r *http.Request) {
+// WSEventsHandler upgrades the HTTP connection to a WebSocket for bidirectional event pushing
+func WSEventsHandler(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("Failed to upgrade to WebSocket: %v", err)
 		return
 	}
-	defer conn.Close()
 
-	log.Println("New WebSocket client connected (Pre-reserved for Milestone 3+)")
-	
-	// Keep connection alive until client disconnects
+	// Extract device from query params if available
+	device := r.URL.Query().Get("device")
+	if device == "" {
+		device = "unknown_client"
+	}
+
+	client := &Client{
+		Conn:     conn,
+		Device:   device,
+		SendChan: make(chan []byte, 256),
+	}
+
+	hub.Register(client)
+
+	// writePump: handles outgoing messages to this client
+	go func() {
+		defer client.Conn.Close()
+		for message := range client.SendChan {
+			if err := client.Conn.WriteMessage(websocket.TextMessage, message); err != nil {
+				return
+			}
+		}
+	}()
+
+	// readPump: handles incoming WS messages
+	defer hub.Unregister(client)
 	for {
-		_, _, err := conn.ReadMessage()
+		var msg Message
+		err := client.Conn.ReadJSON(&msg)
 		if err != nil {
 			break
 		}
+		
+		log.Printf("Received WS message [ID: %s] from %s: %s", msg.MessageID, msg.Source, msg.Event)
+		if msg.Event == "clipboard_sync" {
+			if payloadMap, ok := msg.Payload.(map[string]interface{}); ok {
+				if payloadMap["type"] == "text" {
+					if text, ok := payloadMap["data"].(string); ok {
+						clipboard.WriteText(text)
+						log.Printf("Synchronized clipboard text from WS %s", msg.Source)
+					}
+				}
+			}
+		}
 	}
-	log.Println("WebSocket client disconnected")
 }

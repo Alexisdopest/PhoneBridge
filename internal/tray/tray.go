@@ -10,11 +10,15 @@ import (
 )
 
 type TrayManager struct {
+	port   string
+	token  string
 	onQuit func()
 }
 
-func NewTrayManager(onQuit func()) *TrayManager {
+func NewTrayManager(port, token string, onQuit func()) *TrayManager {
 	return &TrayManager{
+		port:   port,
+		token:  token,
 		onQuit: onQuit,
 	}
 }
@@ -32,6 +36,7 @@ func (t *TrayManager) onReady() {
 	systray.SetTitle("PhoneBridge")
 	systray.SetTooltip("PhoneBridge - LAN Collaboration")
 
+	mShowQR := systray.AddMenuItem("显示配对二维码", "展示与手机快捷指令绑定的二维码")
 	mOpenDir := systray.AddMenuItem("打开接收文件夹", "Open the folder where files are saved")
 	
 	mAutoStart := systray.AddMenuItemCheckbox("开机启动", "Start PhoneBridge with Windows", autostart.IsEnabled())
@@ -42,6 +47,9 @@ func (t *TrayManager) onReady() {
 	go func() {
 		for {
 			select {
+			case <-mShowQR.ClickedCh:
+				ShowPairingQR(t.port, t.token)
+
 			case <-mOpenDir.ClickedCh:
 				homeDir, _ := os.UserHomeDir()
 				destDir := filepath.Join(homeDir, "Downloads", "PhoneBridge")
